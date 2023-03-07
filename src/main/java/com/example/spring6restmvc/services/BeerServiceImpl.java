@@ -17,6 +17,7 @@ import java.util.UUID;
 @Slf4j
 public class BeerServiceImpl implements BeerService{
     private Map<UUID, Beer> beerMap;
+
     public BeerServiceImpl(){
         this.beerMap = new HashMap<>();
         Beer galaxyCat = Beer.builder()
@@ -71,5 +72,24 @@ public class BeerServiceImpl implements BeerService{
     public Beer getBeerById(UUID id) {
         log.debug("Get beer ID ");
         return beerMap.get(id);
+    }
+
+    @Override
+    public Beer saveNewBeer(Beer beer) {
+        Beer savedBuild = Beer.builder()
+                .id(UUID.randomUUID())
+                .createdDate(LocalDateTime.now())
+                .updateDate(LocalDateTime.now())
+                .beerName(beer.getBeerName())
+                .beerStyle(beer.getBeerStyle())
+                .quantityOnHand(beer.getQuantityOnHand())
+                .upc(beer.getUpc())
+                .price(beer.getPrice())
+                .build();
+
+        beerMap.put(savedBuild.getId(), savedBuild);
+        System.out.println(savedBuild);
+
+        return savedBuild;
     }
 }
