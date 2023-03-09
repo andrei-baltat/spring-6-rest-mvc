@@ -56,6 +56,17 @@ class BeerControllerTest {
     @Captor
     ArgumentCaptor<Beer> beerArgumentCaptor;
 
+
+    @Test
+    @SneakyThrows
+    void getBeerByIdNotFound(){
+        given(beerService.getBeerById(any(UUID.class))).willThrow(NotFoundException.class);
+        mockMvc.perform(get(BeerController.BEER_URL_WITH_ID, UUID.randomUUID()))
+                .andExpect(status().isNotFound());
+    }
+
+
+
     @Test
     @SneakyThrows
     void testPatchBeer() {
