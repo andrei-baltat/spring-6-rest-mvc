@@ -80,7 +80,8 @@ class BeerControllerTest {
                         patch(URL + "/" + id)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON)
-                                .contentType(mapper.writeValueAsString(beer)))
+                                .contentType(mapper.writeValueAsString(beer))
+                )
                 .andExpect(status().isNoContent());
 
         verify(beerService).patchBeerById(uuidArgumentCaptor.capture(), beerArgumentCaptor.capture());
@@ -179,7 +180,7 @@ class BeerControllerTest {
     void getBeerById() {
         UUID id = UUID.randomUUID();
 
-        Beer galaxyCat = Beer.builder()
+        Beer beer = Beer.builder()
                 .id(id)
                 .version(1)
                 .beerName("Galaxy cat")
@@ -191,13 +192,13 @@ class BeerControllerTest {
                 .price(new BigDecimal("12.99"))
                 .build();
 
-        when(beerService.getBeerById(id)).thenReturn(galaxyCat);
+        when(beerService.getBeerById(id)).thenReturn(beer);
 
         mockMvc.perform(get(URL + "/" + id).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id", is(galaxyCat.getId().toString())))
-                .andExpect(jsonPath("$.beerName", is(galaxyCat.getBeerName())));
+                .andExpect(jsonPath("$.id", is(beer.getId().toString())))
+                .andExpect(jsonPath("$.beerName", is(beer.getBeerName())));
     }
 
 
