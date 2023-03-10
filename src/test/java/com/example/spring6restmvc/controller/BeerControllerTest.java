@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -60,11 +61,10 @@ class BeerControllerTest {
     @Test
     @SneakyThrows
     void getBeerByIdNotFound(){
-        given(beerService.getBeerById(any(UUID.class))).willThrow(NotFoundException.class);
+        given(beerService.getBeerById(any(UUID.class))).willReturn(Optional.empty());
         mockMvc.perform(get(BeerController.BEER_URL_WITH_ID, UUID.randomUUID()))
                 .andExpect(status().isNotFound());
     }
-
 
 
     @Test
@@ -203,7 +203,7 @@ class BeerControllerTest {
                 .price(new BigDecimal("12.99"))
                 .build();
 
-        when(beerService.getBeerById(id)).thenReturn(beer);
+        when(beerService.getBeerById(id)).thenReturn(Optional.of(beer));
 
         mockMvc.perform(get(URL + "/" + id).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

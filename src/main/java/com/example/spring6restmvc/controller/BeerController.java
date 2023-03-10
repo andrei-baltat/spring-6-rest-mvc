@@ -69,15 +69,10 @@ public class BeerController {
     @GetMapping(BEER_URL_WITH_ID)
     public Beer getBeerById(@PathVariable("beerId") UUID beerId) {
         log.debug("123 777");
-        return beerService.getBeerById(beerId);
+        return beerService.getBeerById(beerId).orElseThrow(NotFoundException::new);
     }
 
-    // this will handle NotFoundException exceptions when thrown ONLY on this controller
-    @ExceptionHandler(NotFoundException.class)
-    private ResponseEntity handleNotFoundException(){
-        log.debug("i am in handleNotFoundException");
-        return ResponseEntity.notFound().build();
-    }
+
 
 
 }
